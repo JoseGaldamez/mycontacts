@@ -1,17 +1,43 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Contacto nuevo
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="container">
+
+    <form (ngSubmit)="onSubmit()" class="form-new-contact">
+      <ion-list>
+        <ion-item>
+          <ion-input placeholder="Nombre" [ngModelOptions]="{standalone: true}" type="text"
+            [(ngModel)]="newContact.name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input placeholder="Email" [ngModelOptions]="{standalone: true}" type="email"
+            [(ngModel)]="newContact.email"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input placeholder="Teléfono" [ngModelOptions]="{standalone: true}" type="tel"
+            [(ngModel)]="newContact.phone"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input placeholder="Dirección" [ngModelOptions]="{standalone: true}" type="text"
+            [(ngModel)]="newContact.address"></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-button [disabled]="isFormInComplete()" expand="full" type="submit">Guardar</ion-button>
+    </form>
+
+    <!-- <ion-toast [color]="toastColor" [isOpen]="isToastOpen" [message]="toastMessage" [duration]="5000"></ion-toast> -->
+
+  </div>
+
+
 </ion-content>
