@@ -9,9 +9,18 @@
 <ion-content [fullscreen]="true">
 
   <ion-list>
-    <ion-item *ngFor="let contact of contacts()">
-      <h3>{{ contact.name }}</h3>
-    </ion-item>
+    <ion-item-sliding *ngFor="let contact of contacts()">
+      <ion-item (click)="goDetails(contact.id)">
+        <h3>{{ contact.name }}</h3>
+      </ion-item>
+
+      <ion-item-options>
+        <ion-item-option color="danger" (click)="deleteContact(contact)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          Delete</ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
   </ion-list>
 
 </ion-content>

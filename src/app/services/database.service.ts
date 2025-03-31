@@ -43,6 +43,11 @@ export class DatabaseService {
     return this.contacts;
   }
 
+  getContactById(id: number) {
+    const contactsTemp = this.contacts();
+    return contactsTemp.find((contact) => contact.id === id);
+  }
+
   async initializeDB() {
     try {
       this.db = await this.sqliteconnection.createConnection(
@@ -103,6 +108,42 @@ export class DatabaseService {
     }
   }
 
+  async updateContact(contact: ContactModel) {
+    if (Capacitor.getPlatform() === 'web') {
+      await this.updateOnLocalStorage(contact);
+      return true;
+    }
+
+    try {
+      const updateQuery = `UPDATE contacts SET name = '${contact.name}', email = '${contact.email}', phone = '${contact.phone}', address = '${contact.address}' WHERE id = ${contact.id}`;
+
+      await this.db?.execute(updateQuery);
+      this.loadContactsFromDB();
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async deleteContact(contact: ContactModel) {
+    if (Capacitor.getPlatform() === 'web') {
+      await this.deleteOnLocalStorage(contact);
+      return true;
+    }
+
+    try {
+      const deleteQuery = `DELETE FROM contacts WHERE id = ${contact.id}`;
+
+      await this.db?.execute(deleteQuery);
+      this.loadContactsFromDB();
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   // Save contacts to local storage when I am on a web platform
   private saveContactsToLocalStorage(contact: ContactCreateDTO) {
     const currentContacts = localStorage.getItem('list-of-contacts');
@@ -129,6 +170,42 @@ export class DatabaseService {
       // Update the contacts array
       //this.contacts = [newContactToSave]; old way
       this.contacts.set([newContactToSave]);
+    }
+  }
+
+  private async updateOnLocalStorage(contact: ContactModel) {
+    const currentContacts = localStorage.getItem('list-of-contacts');
+    if (currentContacts) {
+      const currectContactsJson: ContactModel[] = JSON.parse(currentContacts);
+      const indexToUpdate = currectContactsJson.findIndex(
+        (contactLocaStorage) => contactLocaStorage.id === contact.id
+      );
+      currectContactsJson[indexToUpdate] = contact;
+      localStorage.setItem(
+        'list-of-contacts',
+        JSON.stringify(currectContactsJson)
+      );
+      // Update the contacts array
+      //this.contacts = currectContactsJson; old way
+      this.contacts.set(currectContactsJson);
+    }
+  }
+
+  private async deleteOnLocalStorage(contact: ContactModel) {
+    const currentContacts = localStorage.getItem('list-of-contacts');
+    if (currentContacts) {
+      const currectContactsJson: ContactModel[] = JSON.parse(currentContacts);
+      const indexToDelete = currectContactsJson.findIndex(
+        (contactLocaStorage) => contactLocaStorage.id === contact.id
+      );
+      currectContactsJson.splice(indexToDelete, 1);
+      localStorage.setItem(
+        'list-of-contacts',
+        JSON.stringify(currectContactsJson)
+      );
+      // Update the contacts array
+      //this.contacts = currectContactsJson; old way
+      this.contacts.set(currectContactsJson);
     }
   }
 }

@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{ contact.name}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-list>
+    <ion-item>
+      <div class="item-list-contact">
+        <h3>Nombre</h3>
+        <p *ngIf="editing === false">{{ contact.name }}</p>
+        <ion-input *ngIf="editing === true" placeholder="Nombre" [ngModelOptions]="{standalone: true}" type="text"
+          [(ngModel)]="contact.name"></ion-input>
+      </div>
+    </ion-item>
+    <ion-item>
+      <div class="item-list-contact">
+        <h3>Email</h3>
+        <p *ngIf="editing === false">{{ contact.email }}</p>
+        <ion-input *ngIf="editing === true" placeholder="Nombre" [ngModelOptions]="{standalone: true}" type="text"
+          [(ngModel)]="contact.email"></ion-input>
+      </div>
+    </ion-item>
+    <ion-item>
+      <div class="item-list-contact">
+        <h3>Teléfono</h3>
+        <p *ngIf="editing === false">{{ contact.phone }}</p>
+        <ion-input *ngIf="editing === true" placeholder="Nombre" [ngModelOptions]="{standalone: true}" type="text"
+          [(ngModel)]="contact.phone"></ion-input>
+      </div>
+    </ion-item>
+    <ion-item>
+      <div class="item-list-contact">
+        <h3>Dirección</h3>
+        <p *ngIf="editing === false">{{ contact.address }}</p>
+        <ion-input *ngIf="editing === true" placeholder="Nombre" [ngModelOptions]="{standalone: true}" type="text"
+          [(ngModel)]="contact.address"></ion-input>
+      </div>
+    </ion-item>
+
+
+    <ion-button (click)="activeEdit()" expand="block">
+      <ion-icon name="create-outline"></ion-icon>
+      {{ editing ? "Guardar" : "Editar" }}
+    </ion-button>
+    <ion-button *ngIf="editing" color="danger" (click)="cancel()" expand="block">
+      <ion-icon name="close-circle-outline"></ion-icon>
+      Cancelar
+    </ion-button>
+
+
+  </ion-list>
+
+
+
+
+
+</ion-content>
